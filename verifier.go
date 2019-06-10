@@ -55,6 +55,26 @@ ExpectedLabels:
 	}
 }
 
+// CheckPrometheusCounterVec is a helper method that checks that prometheus counter
+// doesn't get called with a set of parameters on the passed in registry
+func CheckPrometheusCounterVecNotCalled(t *testing.T, reg *prometheus.Registry, counter *prometheus.CounterVec, expectedValue float64, expectedLabels ...ExpectationLabelPair) {
+	metricFamilies, err := reg.Gather()
+	if err != nil {
+		t.Fatalf("Unable to gather prometheus metrics: %+v", err)
+	}
+
+	if len(metricFamilies) > 0 ||
+		len(metricFamilies[0].Metric) > 0 ||
+		len(metricFamilies[0].Metric[0].Label) > 0 {
+		metricCount := 0
+		if len(metricFamilies) > 0 {
+			metricCount = len(metricFamilies[0].Metric)
+		}
+
+		t.Fatalf("Expected 0 MetricFamilies; got: %d.\n\tExpected 0 Metric; got: %d", len(metricFamilies), metricCount)
+	}
+}
+
 // CheckPrometheusCounter is a helper method that checks that prometheus counter
 // has the expected value on the passed in registry
 func CheckPrometheusCounter(reg *prometheus.Registry, counter prometheus.Counter, expectedValue float64, t *testing.T) {
