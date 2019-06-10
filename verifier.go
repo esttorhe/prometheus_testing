@@ -63,8 +63,8 @@ func CheckPrometheusCounterVecNotCalled(t *testing.T, reg *prometheus.Registry, 
 		t.Fatalf("Unable to gather prometheus metrics: %+v", err)
 	}
 
-	if len(metricFamilies) > 0 ||
-		len(metricFamilies[0].Metric) > 0 ||
+	if len(metricFamilies) > 0 &&
+		len(metricFamilies[0].Metric) > 0 &&
 		len(metricFamilies[0].Metric[0].Label) > 0 {
 		metricCount := 0
 		if len(metricFamilies) > 0 {
