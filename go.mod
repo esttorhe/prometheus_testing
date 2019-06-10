@@ -1,4 +1,4 @@
-module github.com/esttorhe/prometheus-testing
+module github.com/esttorhe/prometheus_testing
 
 go 1.12
 
